@@ -28,9 +28,9 @@
    Reproduce el logo del presupuesto de referencia: recuadro de 58x44 (ratio
    1.32), marco fino, X en serif negrita ocupando el 33% del ancho y el 50%
    del alto, y una línea vertical debajo de la misma altura que el recuadro.
-   Se usa SVG con <text> para que el glifo sea el mismo que en el original;
-   al imprimir se refuerza la familia tipográfica porque la regla universal
-   de impresión fuerza `font-family: inherit` en todo el documento. */
+   Se usa SVG con <text> para que el glifo sea el mismo que en el original; la
+   familia se declara explícita en pantalla y en impresión para que el glifo no
+   dependa de la sans del sistema. */
 .logo-x {
   display: flex;
   flex-direction: column;
@@ -84,8 +84,9 @@
   }
 
   /* --- Documento plano ----------------------------------------------------
-     Se anula toda decoración: fondos, degradados, sombras, redondeos,
-     colores y tipografías especiales. Queda texto negro y líneas. */
+     Se anula toda decoración: fondos, degradados, sombras, redondeos y
+     colores. Queda texto negro y líneas. Las familias tipográficas se
+     conservan a propósito, para que el PDF iguale a la UI. */
   *,
   *::before,
   *::after {
@@ -96,7 +97,12 @@
     border-radius: 0 !important;
     border-color: #000 !important;
     color: #000 !important;
-    font-family: inherit !important;
+    /* La familia tipográfica NO se neutraliza acá. Un `font-family: inherit`
+       en este selector alcanzaba también a <html>, que no tiene padre del que
+       heredar, así que caía en la fuente inicial del navegador (serif = Times
+       New Roman) y el PDF entero salía en Times aunque en pantalla se viera la
+       sans del sistema. Dejando cada familia como está, el PDF se imprime con
+       la misma tipografía que la UI. */
     font-style: normal !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -285,6 +291,18 @@
   header input[type="text"],
   header input[type="email"] {
     font-size: 9pt !important;
+  }
+
+  /* --- Aviso "Documento no válido como factura" --------------------------
+     Se imprime a propósito: el documento plano ya anula el fondo ámbar y el
+     texto sale negro, así que queda como una línea en versalitas arriba del
+     número de presupuesto. Se anula el padding del badge para que alinee al
+     margen derecho como el resto del encabezado. */
+  .aviso-no-factura {
+    padding: 0 !important;
+    margin: 0 0 2mm !important;
+    font-size: 8pt !important;
+    letter-spacing: 0.08em !important;
   }
 
   section {

@@ -2,8 +2,9 @@
 
 Single-page budget (presupuesto) generator for an Argentine notary office
 (escribanía). Pure static HTML/CSS/JS: no package manager, no build, no tests,
-no linter, no CI. Git repository with a single `main` branch and no remote yet.
-Open `index.html` in a browser and press "Imprimir / Guardar en PDF".
+no linter, no CI. Git repository with `main`, `staging` and `develop` branches
+and no remote yet. Open `index.html` in a browser and press
+"Imprimir / Guardar en PDF".
 
 ## Files
 
@@ -16,6 +17,43 @@ Open `index.html` in a browser and press "Imprimir / Guardar en PDF".
 
 There is no `plantilla_presupuesto_escribania.html` anymore: the old
 self-contained template was split into the files above. Do not recreate it.
+
+## Branch flow
+
+`develop` → `staging` → `main`, promoted by hand. There is no CI, so the gate is
+a human opening the page and checking the print preview.
+
+- **`develop`** — default working branch. All commits land here. Feature branches
+  are optional and merge back into `develop`.
+- **`staging`** — frozen candidate for review. It only ever receives merges from
+  `develop`; never commit on it directly. The point is that what you test is
+  exactly what `develop` held at that moment.
+- **`main`** — the version that is safe to print for a real client. Promotion
+  only from `staging`.
+
+Promote a candidate:
+
+```bash
+git checkout staging && git merge --no-ff develop -m "chore: stage <what>"
+# open index.html, verify the checklist below, fix on develop if something breaks
+git checkout main && git merge --no-ff staging -m "chore: release <what>"
+```
+
+If review finds a bug, fix it on `develop`, then merge `develop` into `staging`
+again. Never patch `staging` or `main` directly: the fix would be lost on the next
+promotion and the branches would drift apart.
+
+The rule is enforced by a tracked hook: `.githooks/pre-commit` rejects direct
+commits on `staging` and `main` and allows merges (it checks for `MERGE_HEAD`).
+Git config is not versioned, so after cloning run:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+`git commit --no-verify` bypasses it on purpose; use it only when you know why.
+`.gitattributes` pins `.githooks/**` to LF, because a CRLF hook file makes the
+shell fail to parse it.
 
 ## Domain rules (hard-coded, do not change silently)
 
@@ -55,6 +93,16 @@ colors, shadows, rounded corners or input boxes.
   formatted `.monto-impreso` spans show instead.
 - Browser headers/footers (date, URL, title) cannot be suppressed from CSS. The
   footer explains how to disable them in the print dialog.
+- The "Documento no válido como factura" notice **is** printed, as flat uppercase
+  text above the budget number (`.aviso-no-factura`, intentionally not
+  `.no-print`). Do not add a `display` declaration to that rule: two `!important`
+  declarations of equal specificity resolve by source order, so it would override
+  `.no-print` and silently defeat the convention.
+- Font families are deliberately **not** reset in the print block. Adding
+  `font-family: inherit` to the universal `*` rule also hits `<html>`, which has
+  no parent to inherit from and therefore falls back to the browser's initial
+  serif font (Times New Roman). That single declaration is what used to print the
+  whole PDF in Times while the screen showed the system sans font.
 
 ## Conventions
 
