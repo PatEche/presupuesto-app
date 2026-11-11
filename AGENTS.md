@@ -52,6 +52,8 @@ git config core.hooksPath .githooks
 ```
 
 `git commit --no-verify` bypasses it on purpose; use it only when you know why.
+`.gitattributes` pins `.githooks/**` to LF, because a CRLF hook file makes the
+shell fail to parse it.
 
 ## Domain rules (hard-coded, do not change silently)
 
