@@ -93,6 +93,11 @@ colors, shadows, rounded corners or input boxes.
   formatted `.monto-impreso` spans show instead.
 - Browser headers/footers (date, URL, title) cannot be suppressed from CSS. The
   footer explains how to disable them in the print dialog.
+- The "Documento no válido como factura" notice **is** printed, as flat uppercase
+  text above the budget number (`.aviso-no-factura`, intentionally not
+  `.no-print`). Do not add a `display` declaration to that rule: two `!important`
+  declarations of equal specificity resolve by source order, so it would override
+  `.no-print` and silently defeat the convention.
 - Font families are deliberately **not** reset in the print block. Adding
   `font-family: inherit` to the universal `*` rule also hits `<html>`, which has
   no parent to inherit from and therefore falls back to the browser's initial
