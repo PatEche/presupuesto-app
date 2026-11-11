@@ -1,0 +1,13 @@
+# OS junk
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Local scratch output (do not commit generated PDFs of real budgets)
+*.local.*

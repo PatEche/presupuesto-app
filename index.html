@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Presupuesto</title>
+  <link rel="icon" type="image/x-icon" href="/assets/3925433-budget-money-stocks-icon_111559.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 p-4 md:p-8">
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-slate-200 p-6 md:p-10 print-shadow-none">
+    
+    <!-- Encabezado Editable / Configurable -->
+    <header class="border-b pb-6 mb-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <input type="text" value="ESCRIBANÍA BENVENUTO." readonly class="font-bold text-xl md:text-2xl text-slate-900 w-full focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-500">
+          <input type="text" value="Registro N°1 Lezama | Valentin Entesano | Tel. 2242-432305" readonly class="text-sm text-slate-500 w-full focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-500 mt-1">
+          <input type="email" value="email: mgbenvenuto@gmail.com" readonly class="text-sm text-slate-500 w-full focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-500 mt-1">
+          
+          
+        </div>
+        <!-- Logo del encabezado: recuadro con la X, calcado del presupuesto de
+             referencia. Va como SVG inline (vectores) para que salga nitido en
+             el PDF y no dependa de un archivo externo ni de una imagen. -->
+        <div class="logo-x" aria-hidden="true">
+          <svg class="logo-x-svg" viewBox="0 0 58 44" role="presentation">
+            <rect class="logo-x-marco" x="1" y="1" width="56" height="42" />
+            <text class="logo-x-letra" x="29" y="32.6" font-size="32" text-anchor="middle">X</text>
+          </svg>
+          <div class="logo-regla"></div>
+        </div>
+
+        <div class="text-right w-full md:w-auto">
+          <div class="inline-block bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded uppercase tracking-wide mb-2 no-print">
+            Documento no válido como factura
+          </div>
+          <div class="flex items-center gap-2 justify-end">
+            <span class="text-sm font-semibold text-slate-600">Presupuesto N°:</span>
+            <input type="text" id="nroPresupuesto" value="" placeholder="00000000" class="w-24 text-right border rounded px-2 py-1 text-sm font-bold text-slate-800">
+          </div>
+          <div class="flex items-center gap-2 justify-end mt-1">
+            <span class="text-sm font-semibold text-slate-600">Fecha:</span>
+            <input type="date" id="fechaPresupuesto" class="border rounded px-2 py-1 text-sm text-slate-800">
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Datos del Cliente y Operación -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-slate-50 p-4 rounded-lg border border-slate-200">
+      <div class="space-y-3">
+        <!-- <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wider">Datos del Cliente / Operación</h3> -->
+        <div>
+          <label class="block text-xs font-medium text-slate-500">Señor(es) / Concepto</label>
+          <input type="text" id="clienteNombre" value="" placeholder="Ej.: compra e hipoteca por saldo de precio" class="w-full border rounded px-3 py-1.5 text-sm mt-1 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-medium text-slate-500">Domicilio</label>
+            <input type="text" id="clienteDomicilio" value="" placeholder="Domicilio" class="w-full border rounded px-3 py-1.5 text-sm mt-1">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-500">Condición I.V.A.</label>
+            <!-- <input type="text" id="clienteIva" value="Responsable Inscripto" class="w-full border rounded px-3 py-1.5 text-sm mt-1"> -->
+             <select id="clienteIva" class="w-full border rounded px-3 py-1.5 text-sm mt-1 bg-white">
+            <option value="" selected></option>
+            <option value="RI">Responsable Inscripto</option>
+            <option value="MO">Monotributista</option>
+            <option value="EX">Exento</option>
+            <option value="CF">Consumidor Final</option>
+            <option value="NC">Sujeto No Categorizado</option>    
+          </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <!-- <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wider">Valores de la Operación</h3> -->
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-500">Valor Compra (U$S)</label>
+            <input type="number" id="valCompraUsd" value="" class="w-full border rounded px-3 py-1.5 text-sm mt-1 font-semibold text-slate-800">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-500">Valor Hipoteca (U$S)</label>
+            <input type="number" id="valHipotecaUsd" value="" class="w-full border rounded px-3 py-1.5 text-sm mt-1 font-semibold text-slate-800">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-500">Tipo de Cambio ($ / U$S)</label>
+            <input type="number" id="tipoCambio" value="" step="0.5" class="w-full border rounded px-3 py-1.5 text-sm mt-1 font-semibold text-blue-700">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-500">Honorarios Esc. (U$S)</label>
+            <input type="number" id="honorariosUsd" value="" class="w-full border rounded px-3 py-1.5 text-sm mt-1 font-semibold text-slate-800">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detalle manual de lo que se presupuesta -->
+    <section id="detalleSection" class="mb-8 is-empty">
+      <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wider mb-2">Detalle de lo presupuestado</h3>
+      <textarea id="detallePresupuesto" rows="3"
+        placeholder="Describí acá la operación que se presupuesta (por ejemplo: escritura de compraventa del inmueble sito en ...)"
+        class="w-full border rounded px-3 py-2 text-sm text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+      <!-- Espejo de solo lectura que se usa al imprimir: garantiza que el texto
+           largo salga completo, sin el recorte de altura de un textarea. -->
+      <div id="detalleTextoImpreso" class="detalle-texto"></div>
+    </section>
+
+    <!-- Tabla de Desglose de Gastos -->
+    <section class="mb-8 overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-800 text-white text-xs uppercase">
+            <th class="p-3 rounded-tl-lg">Concepto / Ítem</th>
+            <th class="p-3 w-32 text-center no-print">% / Base</th>
+            <th class="p-3 w-40 text-right rounded-tr-lg">Importe ($)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 text-sm">
+          
+          <!-- Conceptos No Gravados -->
+          <tr class="bg-slate-50 font-semibold text-slate-700">
+            <td colspan="3" class="p-2 pl-3">1. CONCEPTOS NO GRAVADOS POR EL I.V.A. (Impuestos y Tasas)</td>
+          </tr>
+          <tr>
+            <td class="p-3">Impuesto de Sellos Compraventa</td>
+            <td class="p-3 text-center no-print">
+              <input type="number" id="rateSellos" value="1.0" step="0.1" class="w-16 border rounded text-center text-xs p-1"> %
+            </td>
+            <td class="p-3 text-right font-mono" id="outSellos">$0,00</td>
+          </tr>
+          <tr>
+            <td class="p-3">Aporte Notarial Compraventa</td>
+            <td class="p-3 text-center no-print">
+              <input type="number" id="rateAporteCompra" value="0.4" step="0.05" class="w-16 border rounded text-center text-xs p-1"> %
+            </td>
+            <td class="p-3 text-right font-mono" id="outAporteCompra">$0,00</td>
+          </tr>
+          <tr>
+            <td class="p-3">Aporte Notarial Hipoteca</td>
+            <td class="p-3 text-center no-print">
+              <input type="number" id="rateAporteHip" value="0.3" step="0.05" class="w-16 border rounded text-center text-xs p-1"> %
+            </td>
+            <td class="p-3 text-right font-mono" id="outAporteHip">$0,00</td>
+          </tr>
+          <tr>
+            <td class="p-3">Tasa de Inscripción Compraventa</td>
+            <td class="p-3 text-center no-print">
+              <input type="number" id="rateTasaCompra" value="0.2" step="0.05" class="w-16 border rounded text-center text-xs p-1"> %
+            </td>
+            <td class="p-3 text-right font-mono" id="outTasaCompra">$0,00</td>
+          </tr>
+          <tr>
+            <td class="p-3">Tasa de Inscripción Hipoteca</td>
+            <td class="p-3 text-center no-print">
+              <input type="number" id="rateTasaHip" value="0.2" step="0.05" class="w-16 border rounded text-center text-xs p-1"> %
+            </td>
+            <td class="p-3 text-right font-mono" id="outTasaHip">$0,00</td>
+          </tr>
+          <tr>
+            <td class="p-3">Sellos Matriz y Testimonio (Fijo)</td>
+            <td class="p-3 text-center no-print">-</td>
+            <td class="p-3 text-right font-mono">
+              <input type="number" id="valSellosMatriz" value="" class="w-32 border rounded text-right p-1 font-mono text-sm">
+              <span class="monto-impreso" id="outSellosMatriz"></span>
+            </td>
+          </tr>
+          <tr class="bg-slate-100 font-semibold">
+            <td class="p-3 text-right" colspan="2">Subtotal Conceptos No Gravados:</td>
+            <td class="p-3 text-right font-mono text-blue-900" id="subtotalNoGravado">$0,00</td>
+          </tr>
+
+          <!-- Conceptos Gravados -->
+          <tr class="bg-slate-50 font-semibold text-slate-700">
+            <td colspan="3" class="p-2 pl-3">2. CONCEPTOS GRAVADOS POR EL I.V.A.</td>
+          </tr>
+          <tr>
+            <td class="p-3">Elaboración de minutas / Gastos de Gestión</td>
+            <td class="p-3 text-center no-print">-</td>
+            <td class="p-3 text-right font-mono">
+              <input type="number" id="valMinutas" value="" class="w-32 border rounded text-right p-1 font-mono text-sm">
+              <span class="monto-impreso" id="outMinutas"></span>
+            </td>
+          </tr>
+          <tr class="bg-slate-100 font-semibold">
+            <td class="p-3 text-right" colspan="2">Subtotal Conceptos Gravados:</td>
+            <td class="p-3 text-right font-mono text-blue-900" id="subtotalGravado">$0,00</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Resumen de Totales -->
+    <section class="flex flex-col md:flex-row justify-between items-start gap-6 pt-4 border-t border-slate-300">
+      <div class="w-full md:w-1/2">
+        <label class="block text-xs font-semibold text-slate-500 uppercase mb-1">Monto en letras (Automático):</label>
+        <div id="montoEnLetras" class="p-3 bg-slate-50 border rounded text-sm italic font-medium text-slate-700 min-h-[50px]">
+          -
+        </div>
+      </div>
+
+      <div class="w-full md:w-1/2 space-y-2 text-right font-mono">
+        <div class="flex justify-between text-sm">
+          <span class="font-sans text-slate-600">Subtotal Gastos / Tasas:</span>
+          <span id="resSubtotal" class="font-semibold">$0,00</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="font-sans text-slate-600">I.V.A. (21% sobre gravados):</span>
+          <span id="resIva" class="font-semibold text-slate-800">$0,00</span>
+        </div>
+        <div class="flex justify-between text-lg font-bold border-t border-b border-slate-300 py-2 mt-2 bg-slate-50 px-2 text-slate-900">
+          <span class="font-sans">TOTAL A PAGAR ($):</span>
+          <span id="resTotal" class="text-blue-700">$0,00</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Botones de Acción -->
+    <footer class="mt-8 pt-4 border-t no-print flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <p class="text-xs text-slate-500 leading-snug md:max-w-md">
+        Para que el PDF salga sin fecha, hora ni la ruta del archivo: en el diálogo de impresión abrí
+        <span class="font-semibold">Más configuraciones</span> y desmarcá
+        <span class="font-semibold">Encabezados y pies de página</span>.
+      </p>
+      <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-5 py-2.5 rounded-lg shadow text-sm transition shrink-0">
+        Imprimir / Guardar en PDF
+      </button>
+    </footer>
+  </div>
+  <!--Enlace al archivo JavaScript-->
+  <script src="./js/script.js"></script>
+</body>
+
+</html>
