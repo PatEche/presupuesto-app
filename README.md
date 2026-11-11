@@ -10,11 +10,13 @@ navegador y se trabaja.
 
 ## Qué calcula
 
-Cargás los valores en dólares de la operación y el tipo de cambio, y la planilla
-resuelve sola los importes en pesos, los impuestos y tasas, el IVA y el total.
+Cargás los valores de la operación y el tipo de cambio, y la planilla resuelve
+sola los importes en pesos, los impuestos y tasas, el IVA y el total.
 
-**Conceptos no gravados por IVA** (editables: se pueden renombrar, cambiar de
-base, agregar y eliminar)
+**Conceptos no gravados por IVA** (la tabla arranca **vacía**: cada concepto se
+agrega a mano y después se puede renombrar, cambiar de base o eliminar)
+
+Los seis conceptos que usa la escribanía, como referencia:
 
 - Impuesto de sellos sobre la compraventa
 - Aporte notarial de compraventa
@@ -25,8 +27,8 @@ base, agregar y eliminar)
 
 Cada fila no gravada elige su base: porcentaje sobre la compraventa, porcentaje
 sobre la hipoteca o un importe fijo en pesos. El subtotal se recalcula solo al
-agregar, editar o borrar filas. En el PDF cada fila imprime únicamente concepto e
-importe.
+agregar, editar o borrar filas. Sin filas cargadas la sección no se imprime. En el
+PDF cada fila imprime únicamente concepto e importe.
 
 **Conceptos gravados por IVA**
 
@@ -44,8 +46,8 @@ salen formateados en lugar del número crudo.
 - Detalle libre de lo presupuestado, sin recorte de texto al exportar.
 - Exportación a **una sola página A4** en blanco y negro: sin fondos, colores,
   sombras ni cajas de formulario.
-- Los campos vacíos no imprimen su texto de ayuda, así una hoja sin completar
-  sale limpia.
+- Los campos vacíos no imprimen su texto de ayuda. Si no hay conceptos no
+  gravados cargados, esa sección no se imprime; si no hay detalle, tampoco.
 
 ## Cómo se usa
 
@@ -55,8 +57,8 @@ salen formateados en lugar del número crudo.
 3. Cargá los valores de la operación y el tipo de cambio. Los valores pueden ser
    en dólares o en pesos: si la operación ya está en pesos, poné tipo de cambio
    `1` y los importes se toman tal cual.
-4. Revisá las tasas y los importes fijos; los conceptos no gravados se agregan,
-   renombran y borran desde la tabla.
+4. Agregá los conceptos no gravados con el botón de la tabla: se renombran,
+   cambian de base y se borran ahí mismo.
 5. Presioná **Imprimir / Guardar en PDF**.
 6. En el diálogo de impresión abrí *Más configuraciones* y desmarcá
    *Encabezados y pies de página*. La fecha, la hora y la ruta del archivo las

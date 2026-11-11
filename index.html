@@ -137,12 +137,14 @@
         <tbody class="divide-y divide-slate-200 text-sm">
           
           <!-- Conceptos No Gravados: las filas las genera js/script.js a partir de
-               CONCEPTOS_NO_GRAVADOS y se pueden agregar, renombrar o eliminar.
+               CONCEPTOS_NO_GRAVADOS (vacío por defecto: el presupuesto arranca
+               sin conceptos cargados) y se pueden agregar, renombrar o eliminar.
                Cada fila: nombre editable, base del cálculo (% compraventa,
                % hipoteca o importe fijo) y el importe ya calculado. El precio
                unitario y el botón de borrar van en la celda .no-print, así el
-               papel solo muestra concepto e importe. -->
-          <tr class="bg-slate-50 font-semibold text-slate-700">
+               papel solo muestra concepto e importe. Sin filas, el título y el
+               subtotal de la sección no se imprimen (clase .fila-vacia). -->
+          <tr id="filaTituloNoGravado" class="bg-slate-50 font-semibold text-slate-700">
             <td colspan="3" class="p-2 pl-3">1. CONCEPTOS NO GRAVADOS POR EL I.V.A. (Impuestos y Tasas)</td>
           </tr>
           <tr id="filaAgregarNoGravado" class="no-print">

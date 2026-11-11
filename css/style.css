@@ -129,6 +129,13 @@
     display: none !important;
   }
 
+  /* La sección de conceptos no gravados sin filas no se imprime: quedarían el
+     título y un subtotal de "$ 0,00" al lado de nada. La clase la pone
+     calcular() cuando no hay ninguna fila. */
+  tr.fila-vacia {
+    display: none !important;
+  }
+
   /* La columna "% / Base" de la tabla está marcada .no-print, pero eliminar
      esas celdas con display:none ROMPE la estructura: los `colspan` de los
      subtotales dejan de coincidir y el encabezado queda más angosto que el

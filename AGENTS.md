@@ -77,10 +77,15 @@ shell fail to parse it.
   truth. Each row carries its own name, a base (`compra` = % of the compraventa
   amount in ARS, `hipoteca` = % of the hipoteca amount, `fijo` = ARS amount typed
   by hand) and its value. The user can rename, re-base, add and delete rows, and
-  the subtotal follows. Defaults, in order: sellos compraventa `1`, aporte
-  compraventa `0.4`, aporte hipoteca `0.3`, tasa compraventa `0.2`, tasa
-  hipoteca `0.2`, sellos matriz y testimonio `fijo` empty. Changing those
-  defaults is a domain change, not a cosmetic one.
+  the subtotal follows.
+- `CONCEPTOS_NO_GRAVADOS` is **empty on purpose**: a new budget opens with no
+  concept loaded and every row is added by hand. The six concepts the original
+  template used to preload are kept here only as the reference set, in case
+  someone decides to preload them again: sellos compraventa (`compra` `1`),
+  aporte compraventa (`compra` `0.4`), aporte hipoteca (`hipoteca` `0.3`), tasa
+  compraventa (`compra` `0.2`), tasa hipoteca (`hipoteca` `0.2`) and sellos
+  matriz y testimonio (`fijo`, empty value). Preloading them again is a domain
+  change, not a cosmetic one.
 - `TOTAL = subtotalNoGravado + subtotalGravado + iva`.
 - Amount in words uses the long scale as used in Argentina: `1.000.000.000` =
   `MIL MILLONES`, `1.000.000.000.000` = `UN BILLÓN`. Apocope `UNO → UN` and
@@ -106,6 +111,13 @@ colors, shadows, rounded corners or input boxes.
   the value input and the delete button; the printed row therefore shows only
   concept and amount. The row that holds the "+ Agregar concepto" button is a
   `<tr class="no-print">`, which the plain `.no-print` rule hides outright.
+- With no non-gravado row, `calcular()` adds `.fila-vacia` to `#filaTituloNoGravado`
+  and `#filaSubtotalNoGravado`, and `tr.fila-vacia { display: none !important }`
+  drops the section from the paper. Without it a blank budget printed a section
+  header and a `$ 0,00` subtotal with nothing under them. The class is screen-safe:
+  it is only declared inside the print block. On a completely empty budget the
+  printed document therefore starts at "2. CONCEPTOS GRAVADOS POR EL I.V.A.":
+  that numbering gap is accepted, an empty form is not a document to hand out.
 - The concept name is edited in a single-line `<input class="concepto-nombre">`
   and printed from the `.concepto-nombre-impreso` span, because an input would
   clip long names instead of wrapping them.
@@ -143,15 +155,19 @@ colors, shadows, rounded corners or input boxes.
 
 - `#honorariosUsd` is rendered but never read by any calculation. Honorarios are
   not part of the total yet.
-- Non-gravado rows are not persisted: reloading the page rebuilds the six
-  defaults and whatever was typed (including added rows) is lost.
+- Non-gravado rows are not persisted: reloading the page opens an empty table
+  again and whatever was typed (including added rows) is lost.
 - No automated tests. Verification is manual (see below).
 
 ## Manual verification checklist
 
-1. Open `index.html`. Empty state: no stray `$0,00` in the printed version and
-   no "SON PESOS CERO".
-2. Sanity check the math: compra `100000` U$S, TC `1000`, minutas `500000`.
+1. Open `index.html`. Empty state: the non-gravado section is absent from the
+   printout (no header, no subtotal row), the amount-in-words line stays blank and
+   the totals read `$ 0,00`. Section 2, its minutas row and the totals **do**
+   print: the page is a form, and only the concept list disappears.
+2. Sanity check the math. Add three non-gravado rows first: sellos compraventa
+   (`compra` `1`), aporte compraventa (`compra` `0.4`) and tasa compraventa
+   (`compra` `0.2`). Then compra `100000`, TC `1000`, minutas `500000`.
    Expect sellos 1.000.000, aporte compra 400.000, tasa compra 200.000,
    subtotal no gravado 1.600.000, IVA 105.000, total 2.205.000, and
    `SON PESOS DOS MILLONES DOSCIENTOS CINCO MIL CON 00/100`.

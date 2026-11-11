@@ -117,6 +117,13 @@
 
       document.getElementById('subtotalNoGravado').innerText = formatPesos(subtotalNoGravado);
 
+      // Sin filas no hay nada que mostrar: el título de la sección y su
+      // subtotal se ocultan al imprimir, si no el papel sale con un
+      // "1. CONCEPTOS NO GRAVADOS..." y un "$ 0,00" que no aportan nada.
+      const hayConceptosNoGravados = filasNoGravado.length > 0;
+      document.getElementById('filaTituloNoGravado').classList.toggle('fila-vacia', !hayConceptosNoGravados);
+      document.getElementById('filaSubtotalNoGravado').classList.toggle('fila-vacia', !hayConceptosNoGravados);
+
       // Sin tipo de cambio no hay forma de convertir la compraventa ni la
       // hipoteca, así que los conceptos porcentuales caen a cero en silencio.
       // El aviso solo tiene sentido si hay importes en juego y alguna fila que
@@ -145,17 +152,14 @@
 
     // --- Conceptos no gravados editables -------------------------------------
     // La tabla es la fuente de verdad: cada fila guarda su nombre, su base y
-    // su valor, y se recalcula todo leyendo el DOM. Estos son los conceptos
-    // que trae el presupuesto por defecto; el usuario puede agregar, renombrar
-    // o eliminar filas, y el subtotal de no gravados los sigue.
-    const CONCEPTOS_NO_GRAVADOS = [
-      { nombre: 'Impuesto de Sellos Compraventa', base: 'compra', valor: 1 },
-      { nombre: 'Aporte Notarial Compraventa', base: 'compra', valor: 0.4 },
-      { nombre: 'Aporte Notarial Hipoteca', base: 'hipoteca', valor: 0.3 },
-      { nombre: 'Tasa de Inscripción Compraventa', base: 'compra', valor: 0.2 },
-      { nombre: 'Tasa de Inscripción Hipoteca', base: 'hipoteca', valor: 0.2 },
-      { nombre: 'Sellos Matriz y Testimonio', base: 'fijo', valor: '' }
-    ];
+    // su valor, y se recalcula todo leyendo el DOM. El array arranca vacío a
+    // propósito: el presupuesto se abre sin conceptos cargados y cada uno se
+    // agrega con el botón de la tabla. Los seis conceptos de la plantilla
+    // original (sellos compraventa 1%, aporte compraventa 0.4%, aporte hipoteca
+    // 0.3%, tasa compraventa 0.2%, tasa hipoteca 0.2% y sellos matriz fijo)
+    // quedan documentados en AGENTS.md; para volver a precargarlos alcanza con
+    // devolverlos a este array.
+    const CONCEPTOS_NO_GRAVADOS = [];
 
     const tablaDesglose = document.getElementById('tablaDesglose');
     const filaAgregarNoGravado = document.getElementById('filaAgregarNoGravado');
