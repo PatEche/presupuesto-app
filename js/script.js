@@ -88,31 +88,48 @@
       const compraArs = compraUsd * tc;
       const hipotecaArs = hipotecaUsd * tc;
 
-      // Tasas
-      const rateSellos = (parseFloat(document.getElementById('rateSellos').value) || 0) / 100;
-      const rateAporteCompra = (parseFloat(document.getElementById('rateAporteCompra').value) || 0) / 100;
-      const rateAporteHip = (parseFloat(document.getElementById('rateAporteHip').value) || 0) / 100;
-      const rateTasaCompra = (parseFloat(document.getElementById('rateTasaCompra').value) || 0) / 100;
-      const rateTasaHip = (parseFloat(document.getElementById('rateTasaHip').value) || 0) / 100;
+      // Conceptos no gravados: cada fila de la tabla define su propia base.
+      // - compra:   porcentaje sobre el importe de compraventa (ARS)
+      // - hipoteca: porcentaje sobre el importe de hipoteca (ARS)
+      // - fijo:     importe en pesos cargado a mano
+      const filasNoGravado = document.querySelectorAll('#tablaDesglose .concepto-no-gravado');
+      let subtotalNoGravado = 0;
+      let hayBasePorcentual = false;
 
-      // Montos No Gravados
-      const sellos = compraArs * rateSellos;
-      const aporteCompra = compraArs * rateAporteCompra;
-      const aporteHip = hipotecaArs * rateAporteHip;
-      const tasaCompra = compraArs * rateTasaCompra;
-      const tasaHip = hipotecaArs * rateTasaHip;
-      const sellosMatriz = parseFloat(document.getElementById('valSellosMatriz').value) || 0;
+      filasNoGravado.forEach(fila => {
+        const base = fila.querySelector('.concepto-base').value;
+        const valor = parseFloat(fila.querySelector('.concepto-valor').value) || 0;
+        if (base !== 'fijo') hayBasePorcentual = true;
 
-      const subtotalNoGravado = sellos + aporteCompra + aporteHip + tasaCompra + tasaHip + sellosMatriz;
+        let importe = 0;
+        if (base === 'compra') importe = compraArs * valor / 100;
+        else if (base === 'hipoteca') importe = hipotecaArs * valor / 100;
+        else importe = valor;
 
-      // Actualizar DOM No Gravados
-      document.getElementById('outSellos').innerText = formatPesos(sellos);
-      document.getElementById('outAporteCompra').innerText = formatPesos(aporteCompra);
-      document.getElementById('outAporteHip').innerText = formatPesos(aporteHip);
-      document.getElementById('outTasaCompra').innerText = formatPesos(tasaCompra);
-      document.getElementById('outTasaHip').innerText = formatPesos(tasaHip);
-      document.getElementById('outSellosMatriz').innerText = formatPesos(sellosMatriz);
+        fila.querySelector('.concepto-importe').innerText = formatPesos(importe);
+        // El nombre se imprime desde un span espejo, porque el input es de una
+        // sola línea y recorta los nombres largos en el PDF.
+        fila.querySelector('.concepto-nombre-impreso').textContent =
+          fila.querySelector('.concepto-nombre').value;
+
+        subtotalNoGravado += importe;
+      });
+
       document.getElementById('subtotalNoGravado').innerText = formatPesos(subtotalNoGravado);
+
+      // Sin filas no hay nada que mostrar: el título de la sección y su
+      // subtotal se ocultan al imprimir, si no el papel sale con un
+      // "1. CONCEPTOS NO GRAVADOS..." y un "$ 0,00" que no aportan nada.
+      const hayConceptosNoGravados = filasNoGravado.length > 0;
+      document.getElementById('filaTituloNoGravado').classList.toggle('fila-vacia', !hayConceptosNoGravados);
+      document.getElementById('filaSubtotalNoGravado').classList.toggle('fila-vacia', !hayConceptosNoGravados);
+
+      // Sin tipo de cambio no hay forma de convertir la compraventa ni la
+      // hipoteca, así que los conceptos porcentuales caen a cero en silencio.
+      // El aviso solo tiene sentido si hay importes en juego y alguna fila que
+      // dependa de ellos; una fila fija no se ve afectada.
+      const faltaTipoCambio = tc === 0 && (compraUsd > 0 || hipotecaUsd > 0) && hayBasePorcentual;
+      document.getElementById('avisoTipoCambio').classList.toggle('hidden', !faltaTipoCambio);
 
       // Montos Gravados
       const valMinutas = parseFloat(document.getElementById('valMinutas').value) || 0;
@@ -133,11 +150,75 @@
         totalGeneral === 0 ? '' : formatMontoEnLetras(totalGeneral);
     }
 
-    // Escuchadores de eventos para recálculo automático
-    const inputs = document.querySelectorAll('input');
-    inputs.forEach(input => {
-      input.addEventListener('input', calcular);
+    // --- Conceptos no gravados editables -------------------------------------
+    // La tabla es la fuente de verdad: cada fila guarda su nombre, su base y
+    // su valor, y se recalcula todo leyendo el DOM. El array arranca vacío a
+    // propósito: el presupuesto se abre sin conceptos cargados y cada uno se
+    // agrega con el botón de la tabla. Los seis conceptos de la plantilla
+    // original (sellos compraventa 1%, aporte compraventa 0.4%, aporte hipoteca
+    // 0.3%, tasa compraventa 0.2%, tasa hipoteca 0.2% y sellos matriz fijo)
+    // quedan documentados en AGENTS.md; para volver a precargarlos alcanza con
+    // devolverlos a este array.
+    const CONCEPTOS_NO_GRAVADOS = [];
+
+    const tablaDesglose = document.getElementById('tablaDesglose');
+    const filaAgregarNoGravado = document.getElementById('filaAgregarNoGravado');
+
+    function crearFilaNoGravado(concepto) {
+      const fila = document.createElement('tr');
+      fila.className = 'concepto-no-gravado';
+      fila.innerHTML = `
+        <td class="p-3">
+          <input type="text" class="concepto-nombre w-full bg-transparent border-0 border-b border-transparent p-0 text-sm text-slate-800 placeholder-slate-400 hover:border-slate-300 focus:border-[#0d6efd] focus:outline-none" placeholder="Concepto">
+          <span class="concepto-nombre-impreso"></span>
+        </td>
+        <td class="p-3 text-center no-print whitespace-nowrap">
+          <select class="concepto-base text-xs border rounded p-1 bg-white" title="Base del cálculo">
+            <option value="compra">% Compraventa</option>
+            <option value="hipoteca">% Hipoteca</option>
+            <option value="fijo">$ Fijo</option>
+          </select>
+          <input type="number" step="0.01" class="concepto-valor w-20 border rounded text-center text-xs p-1 ml-1" title="Porcentaje o importe">
+          <button type="button" class="concepto-borrar ml-1 align-middle text-slate-400 hover:text-red-600 text-sm font-bold" title="Eliminar concepto" aria-label="Eliminar concepto">&times;</button>
+        </td>
+        <td class="p-3 text-right font-mono concepto-importe">$0,00</td>
+      `;
+      fila.querySelector('.concepto-nombre').value = concepto.nombre;
+      fila.querySelector('.concepto-base').value = concepto.base;
+      fila.querySelector('.concepto-valor').value = concepto.valor === '' ? '' : String(concepto.valor);
+      return fila;
+    }
+
+    // Las filas nuevas se insertan arriba del botón "Agregar", así el botón
+    // queda siempre como último renglón del grupo.
+    function agregarFilaNoGravado(concepto) {
+      const fila = crearFilaNoGravado(concepto);
+      filaAgregarNoGravado.before(fila);
+      return fila;
+    }
+
+    CONCEPTOS_NO_GRAVADOS.forEach(agregarFilaNoGravado);
+
+    document.getElementById('agregarNoGravado').addEventListener('click', () => {
+      const fila = agregarFilaNoGravado({ nombre: '', base: 'compra', valor: '' });
+      fila.querySelector('.concepto-nombre').focus();
+      calcular();
+      marcarCamposVacios();
     });
+
+    tablaDesglose.addEventListener('click', (evento) => {
+      const boton = evento.target.closest('.concepto-borrar');
+      if (!boton) return;
+      boton.closest('.concepto-no-gravado').remove();
+      calcular();
+    });
+
+    // Escuchadores de eventos para recálculo automático. Se delegan en el
+    // documento porque las filas de conceptos no gravados se crean y se
+    // eliminan en tiempo de ejecución: un listener por input dejaría afuera a
+    // las filas nuevas. `change` cubre el select de base, que no emite `input`.
+    document.addEventListener('input', calcular);
+    document.addEventListener('change', calcular);
 
     // --- C.U.I.T. del cliente -------------------------------------------------
     // Se formatea a 11 dígitos con guiones (20-12345678-9). Se recalcula desde
