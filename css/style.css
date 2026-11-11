@@ -24,6 +24,12 @@
   display: none;
 }
 
+/* El nombre de cada concepto no gravado se edita en un input y se imprime
+   desde el span espejo, por eso el espejo no se muestra en pantalla. */
+.concepto-nombre-impreso {
+  display: none;
+}
+
 /* --- Logo del encabezado (recuadro con la X) -------------------------------
    Reproduce el logo del presupuesto de referencia: recuadro de 58x44 (ratio
    1.32), marco fino, X en serif negrita ocupando el 33% del ancho y el 50%
@@ -266,9 +272,19 @@
   }
 
   /* Los importes cargados a mano salen formateados y sin el campo */
-  #valSellosMatriz,
   #valMinutas {
     display: none !important;
+  }
+
+  /* El nombre del concepto no gravado se edita en un input de una sola línea,
+     que en el PDF recortaría los nombres largos. Se imprime el span espejo,
+     que sí envuelve texto. */
+  .concepto-nombre {
+    display: none !important;
+  }
+
+  .concepto-nombre-impreso {
+    display: inline !important;
   }
 
   .monto-impreso {

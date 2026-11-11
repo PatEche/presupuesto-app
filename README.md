@@ -13,7 +13,8 @@ navegador y se trabaja.
 Cargás los valores en dólares de la operación y el tipo de cambio, y la planilla
 resuelve sola los importes en pesos, los impuestos y tasas, el IVA y el total.
 
-**Conceptos no gravados por IVA**
+**Conceptos no gravados por IVA** (editables: se pueden renombrar, cambiar de
+base, agregar y eliminar)
 
 - Impuesto de sellos sobre la compraventa
 - Aporte notarial de compraventa
@@ -21,6 +22,11 @@ resuelve sola los importes en pesos, los impuestos y tasas, el IVA y el total.
 - Tasa de inscripción de compraventa
 - Tasa de inscripción de hipoteca
 - Sellos de matriz y testimonio (importe fijo)
+
+Cada fila no gravada elige su base: porcentaje sobre la compraventa, porcentaje
+sobre la hipoteca o un importe fijo en pesos. El subtotal se recalcula solo al
+agregar, editar o borrar filas. En el PDF cada fila imprime únicamente concepto e
+importe.
 
 **Conceptos gravados por IVA**
 
