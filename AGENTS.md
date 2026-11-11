@@ -59,6 +59,16 @@ shell fail to parse it.
 ## Domain rules (hard-coded, do not change silently)
 
 - Locale `es-AR`, currency ARS, always 2 decimals (`Intl.NumberFormat`).
+- The operation may be quoted in USD **or** in ARS: `#valCompraUsd` and
+  `#valHipotecaUsd` are currency-agnostic despite the historical `Usd` suffix in
+  their ids, and `#tipoCambio` is the only converter. For a peso operation the
+  user sets `tipoCambio = 1` and the amounts are taken as-is. There is no
+  currency selector; the field labels are deliberately neutral ("Valor Compra",
+  "Tipo de Cambio") and a screen-only hint explains the `1` case.
+- A blank or zero `tipoCambio` with a compra or hipoteca amount silently zeroes
+  every percentage-based concept, so `calcular()` shows `#avisoTipoCambio`
+  whenever that combination holds and at least one row has a percentage base.
+  The warning never blocks printing; it is screen-only.
 - Rates are entered as percentages in the UI and divided by 100 in `calcular()`.
 - IVA is 21% and applies **only** to gravado amounts (currently `#valMinutas`).
   Hard-coded at `js/script.js` inside `calcular()`.

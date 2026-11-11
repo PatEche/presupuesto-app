@@ -52,10 +52,13 @@ salen formateados en lugar del número crudo.
 1. Abrí `index.html` con doble clic.
 2. Completá el número de presupuesto, la fecha, los datos del cliente
    (concepto, domicilio, condición frente al IVA) y la operación.
-3. Cargá los valores en dólares, el tipo de cambio, las tasas y los importes
-   fijos.
-4. Presioná **Imprimir / Guardar en PDF**.
-5. En el diálogo de impresión abrí *Más configuraciones* y desmarcá
+3. Cargá los valores de la operación y el tipo de cambio. Los valores pueden ser
+   en dólares o en pesos: si la operación ya está en pesos, poné tipo de cambio
+   `1` y los importes se toman tal cual.
+4. Revisá las tasas y los importes fijos; los conceptos no gravados se agregan,
+   renombran y borran desde la tabla.
+5. Presioná **Imprimir / Guardar en PDF**.
+6. En el diálogo de impresión abrí *Más configuraciones* y desmarcá
    *Encabezados y pies de página*. La fecha, la hora y la ruta del archivo las
    agrega el navegador, no la página: solo se sacan desde ahí.
 

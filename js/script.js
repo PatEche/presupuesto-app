@@ -94,10 +94,12 @@
       // - fijo:     importe en pesos cargado a mano
       const filasNoGravado = document.querySelectorAll('#tablaDesglose .concepto-no-gravado');
       let subtotalNoGravado = 0;
+      let hayBasePorcentual = false;
 
       filasNoGravado.forEach(fila => {
         const base = fila.querySelector('.concepto-base').value;
         const valor = parseFloat(fila.querySelector('.concepto-valor').value) || 0;
+        if (base !== 'fijo') hayBasePorcentual = true;
 
         let importe = 0;
         if (base === 'compra') importe = compraArs * valor / 100;
@@ -114,6 +116,13 @@
       });
 
       document.getElementById('subtotalNoGravado').innerText = formatPesos(subtotalNoGravado);
+
+      // Sin tipo de cambio no hay forma de convertir la compraventa ni la
+      // hipoteca, así que los conceptos porcentuales caen a cero en silencio.
+      // El aviso solo tiene sentido si hay importes en juego y alguna fila que
+      // dependa de ellos; una fila fija no se ve afectada.
+      const faltaTipoCambio = tc === 0 && (compraUsd > 0 || hipotecaUsd > 0) && hayBasePorcentual;
+      document.getElementById('avisoTipoCambio').classList.toggle('hidden', !faltaTipoCambio);
 
       // Montos Gravados
       const valMinutas = parseFloat(document.getElementById('valMinutas').value) || 0;
