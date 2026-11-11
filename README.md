@@ -10,10 +10,13 @@ navegador y se trabaja.
 
 ## Qué calcula
 
-Cargás los valores en dólares de la operación y el tipo de cambio, y la planilla
-resuelve sola los importes en pesos, los impuestos y tasas, el IVA y el total.
+Cargás los valores de la operación y el tipo de cambio, y la planilla resuelve
+sola los importes en pesos, los impuestos y tasas, el IVA y el total.
 
-**Conceptos no gravados por IVA**
+**Conceptos no gravados por IVA** (la tabla arranca **vacía**: cada concepto se
+agrega a mano y después se puede renombrar, cambiar de base o eliminar)
+
+Los seis conceptos que usa la escribanía, como referencia:
 
 - Impuesto de sellos sobre la compraventa
 - Aporte notarial de compraventa
@@ -21,6 +24,11 @@ resuelve sola los importes en pesos, los impuestos y tasas, el IVA y el total.
 - Tasa de inscripción de compraventa
 - Tasa de inscripción de hipoteca
 - Sellos de matriz y testimonio (importe fijo)
+
+Cada fila no gravada elige su base: porcentaje sobre la compraventa, porcentaje
+sobre la hipoteca o un importe fijo en pesos. El subtotal se recalcula solo al
+agregar, editar o borrar filas. Sin filas cargadas la sección no se imprime. En el
+PDF cada fila imprime únicamente concepto e importe.
 
 **Conceptos gravados por IVA**
 
@@ -38,18 +46,21 @@ salen formateados en lugar del número crudo.
 - Detalle libre de lo presupuestado, sin recorte de texto al exportar.
 - Exportación a **una sola página A4** en blanco y negro: sin fondos, colores,
   sombras ni cajas de formulario.
-- Los campos vacíos no imprimen su texto de ayuda, así una hoja sin completar
-  sale limpia.
+- Los campos vacíos no imprimen su texto de ayuda. Si no hay conceptos no
+  gravados cargados, esa sección no se imprime; si no hay detalle, tampoco.
 
 ## Cómo se usa
 
 1. Abrí `index.html` con doble clic.
 2. Completá el número de presupuesto, la fecha, los datos del cliente
    (concepto, domicilio, condición frente al IVA) y la operación.
-3. Cargá los valores en dólares, el tipo de cambio, las tasas y los importes
-   fijos.
-4. Presioná **Imprimir / Guardar en PDF**.
-5. En el diálogo de impresión abrí *Más configuraciones* y desmarcá
+3. Cargá los valores de la operación y el tipo de cambio. Los valores pueden ser
+   en dólares o en pesos: si la operación ya está en pesos, poné tipo de cambio
+   `1` y los importes se toman tal cual.
+4. Agregá los conceptos no gravados con el botón de la tabla: se renombran,
+   cambian de base y se borran ahí mismo.
+5. Presioná **Imprimir / Guardar en PDF**.
+6. En el diálogo de impresión abrí *Más configuraciones* y desmarcá
    *Encabezados y pies de página*. La fecha, la hora y la ruta del archivo las
    agrega el navegador, no la página: solo se sacan desde ahí.
 
