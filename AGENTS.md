@@ -43,6 +43,16 @@ If review finds a bug, fix it on `develop`, then merge `develop` into `staging`
 again. Never patch `staging` or `main` directly: the fix would be lost on the next
 promotion and the branches would drift apart.
 
+The rule is enforced by a tracked hook: `.githooks/pre-commit` rejects direct
+commits on `staging` and `main` and allows merges (it checks for `MERGE_HEAD`).
+Git config is not versioned, so after cloning run:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+`git commit --no-verify` bypasses it on purpose; use it only when you know why.
+
 ## Domain rules (hard-coded, do not change silently)
 
 - Locale `es-AR`, currency ARS, always 2 decimals (`Intl.NumberFormat`).
