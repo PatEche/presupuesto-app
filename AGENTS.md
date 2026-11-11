@@ -93,6 +93,11 @@ colors, shadows, rounded corners or input boxes.
   formatted `.monto-impreso` spans show instead.
 - Browser headers/footers (date, URL, title) cannot be suppressed from CSS. The
   footer explains how to disable them in the print dialog.
+- Font families are deliberately **not** reset in the print block. Adding
+  `font-family: inherit` to the universal `*` rule also hits `<html>`, which has
+  no parent to inherit from and therefore falls back to the browser's initial
+  serif font (Times New Roman). That single declaration is what used to print the
+  whole PDF in Times while the screen showed the system sans font.
 
 ## Conventions
 
