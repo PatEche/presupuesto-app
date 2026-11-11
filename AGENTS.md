@@ -2,10 +2,9 @@
 
 Single-page budget (presupuesto) generator for an Argentine notary office
 (escribanía). Pure static HTML/CSS/JS: no package manager, no build, no tests,
-no linter, no CI. Git repository with `main` and `develop` branches and no
-remote yet. Open `index.html` in a browser and press "Imprimir / Guardar en PDF".
-Work happens on `develop`; `main` holds the version that is safe to print for a
-real client.
+no linter, no CI. Git repository with `main`, `staging` and `develop` branches
+and no remote yet. Open `index.html` in a browser and press
+"Imprimir / Guardar en PDF".
 
 ## Files
 
@@ -18,6 +17,31 @@ real client.
 
 There is no `plantilla_presupuesto_escribania.html` anymore: the old
 self-contained template was split into the files above. Do not recreate it.
+
+## Branch flow
+
+`develop` → `staging` → `main`, promoted by hand. There is no CI, so the gate is
+a human opening the page and checking the print preview.
+
+- **`develop`** — default working branch. All commits land here. Feature branches
+  are optional and merge back into `develop`.
+- **`staging`** — frozen candidate for review. It only ever receives merges from
+  `develop`; never commit on it directly. The point is that what you test is
+  exactly what `develop` held at that moment.
+- **`main`** — the version that is safe to print for a real client. Promotion
+  only from `staging`.
+
+Promote a candidate:
+
+```bash
+git checkout staging && git merge --no-ff develop -m "chore: stage <what>"
+# open index.html, verify the checklist below, fix on develop if something breaks
+git checkout main && git merge --no-ff staging -m "chore: release <what>"
+```
+
+If review finds a bug, fix it on `develop`, then merge `develop` into `staging`
+again. Never patch `staging` or `main` directly: the fix would be lost on the next
+promotion and the branches would drift apart.
 
 ## Domain rules (hard-coded, do not change silently)
 
