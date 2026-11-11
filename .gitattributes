@@ -1,0 +1,4 @@
+# Shell scripts must keep LF: a CRLF shebang or line ending breaks the
+# interpreter on some setups, and hooks are executed by the shell.
+*.sh text eol=lf
+.githooks/** text eol=lf

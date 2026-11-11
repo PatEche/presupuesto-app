@@ -1,0 +1,36 @@
+#!/bin/sh
+# Blocks direct commits on the promotion branches.
+#
+# Why: `main` holds the version that is safe to print for a real client and
+# `staging` holds the frozen candidate under review. Both are supposed to
+# receive content only through merges from the branch below them. A direct
+# commit on either one silently diverges from `develop`, and the change is lost
+# on the next promotion.
+#
+# Merges are allowed: promotion happens with `git merge --no-ff`, which writes a
+# commit on the target branch. That is the only legitimate way in.
+#
+# Escape hatch, when you really mean it: `git commit --no-verify`.
+# Enable this hook after cloning: `git config core.hooksPath .githooks`
+
+branch=$(git symbolic-ref --short HEAD 2>/dev/null) || exit 0
+
+case "$branch" in
+  main|staging)
+    git_dir=$(git rev-parse --git-dir 2>/dev/null) || exit 0
+    # A merge in progress is the sanctioned path into these branches.
+    if [ -f "$git_dir/MERGE_HEAD" ]; then
+      exit 0
+    fi
+    echo "pre-commit: direct commits on '$branch' are blocked." >&2
+    echo "pre-commit: work on 'develop' and promote with a merge:" >&2
+    if [ "$branch" = "staging" ]; then
+      echo "pre-commit:   git checkout staging && git merge --no-ff develop" >&2
+    else
+      echo "pre-commit:   git checkout main && git merge --no-ff staging" >&2
+    fi
+    exit 1
+    ;;
+esac
+
+exit 0
