@@ -2,8 +2,10 @@
 
 Single-page budget (presupuesto) generator for an Argentine notary office
 (escribanía). Pure static HTML/CSS/JS: no package manager, no build, no tests,
-no linter, no CI. Git repository with a single `main` branch and no remote yet.
-Open `index.html` in a browser and press "Imprimir / Guardar en PDF".
+no linter, no CI. Git repository with `main` and `develop` branches and no
+remote yet. Open `index.html` in a browser and press "Imprimir / Guardar en PDF".
+Work happens on `develop`; `main` holds the version that is safe to print for a
+real client.
 
 ## Files
 
