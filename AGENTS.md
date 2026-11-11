@@ -115,9 +115,11 @@ colors, shadows, rounded corners or input boxes.
   and `#filaSubtotalNoGravado`, and `tr.fila-vacia { display: none !important }`
   drops the section from the paper. Without it a blank budget printed a section
   header and a `$ 0,00` subtotal with nothing under them. The class is screen-safe:
-  it is only declared inside the print block. On a completely empty budget the
-  printed document therefore starts at "2. CONCEPTOS GRAVADOS POR EL I.V.A.":
-  that numbering gap is accepted, an empty form is not a document to hand out.
+  it is only declared inside the print block.
+- The two section headers carry **no number** ("CONCEPTOS NO GRAVADOS POR EL
+  I.V.A.", "CONCEPTOS GRAVADOS POR EL I.V.A."). They used to read "1." and "2.",
+  which left the printed sheet starting at "2." whenever the non-gravado section
+  was empty. Do not renumber them: the non-gravado section comes and goes.
 - The concept name is edited in a single-line `<input class="concepto-nombre">`
   and printed from the `.concepto-nombre-impreso` span, because an input would
   clip long names instead of wrapping them.
