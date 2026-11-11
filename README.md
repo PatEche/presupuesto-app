@@ -6,6 +6,8 @@ inmobiliarias (compraventa e hipoteca) y exportarlos a PDF en una hoja A4.
 Sin build, sin dependencias instaladas y sin servidor: se abre `index.html` en el
 navegador y se trabaja.
 
+![Interfaz con un presupuesto cargado](assets/readme.png)
+
 ## Qué calcula
 
 Cargás los valores en dólares de la operación y el tipo de cambio, y la planilla
