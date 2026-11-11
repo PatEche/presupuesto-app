@@ -139,6 +139,37 @@
       input.addEventListener('input', calcular);
     });
 
+    // --- C.U.I.T. del cliente -------------------------------------------------
+    // Se formatea a 11 dígitos con guiones (20-12345678-9). Se recalcula desde
+    // los dígitos en cada input para que se pueda borrar y corregir sin pelear
+    // con los guiones; el cursor se reubica después de la misma cantidad de
+    // dígitos, no al final, así editar en el medio no lo tira a la cola.
+    const cuitInput = document.getElementById('clienteCuit');
+
+    function formatearCuit(valor) {
+      const digitos = valor.replace(/\D/g, '').slice(0, 11);
+      if (digitos.length <= 2) return digitos;
+      if (digitos.length <= 10) return digitos.slice(0, 2) + '-' + digitos.slice(2);
+      return digitos.slice(0, 2) + '-' + digitos.slice(2, 10) + '-' + digitos.slice(10);
+    }
+
+    cuitInput.addEventListener('input', () => {
+      const valorPrevio = cuitInput.value;
+      const cursor = cuitInput.selectionStart === null ? valorPrevio.length : cuitInput.selectionStart;
+      const digitosAntesDelCursor = valorPrevio.slice(0, cursor).replace(/\D/g, '').length;
+
+      const formateado = formatearCuit(valorPrevio);
+      cuitInput.value = formateado;
+
+      let posicion = 0;
+      let vistos = 0;
+      while (posicion < formateado.length && vistos < digitosAntesDelCursor) {
+        if (/\d/.test(formateado[posicion])) vistos += 1;
+        posicion += 1;
+      }
+      cuitInput.setSelectionRange(posicion, posicion);
+    });
+
     // --- Campos sin valor -----------------------------------------------------
     // En pantalla el placeholder ayuda a saber qué va en cada campo; en papel es
     // ruido: un presupuesto en blanco no debe imprimir "dd/mm/aaaa" ni el texto
