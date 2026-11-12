@@ -9,15 +9,15 @@
   <link rel="stylesheet" href="./css/style.css">
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800 p-4 md:p-8">
-  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-slate-200 p-6 md:p-10 print-shadow-none">
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-slate-200 p-4 sm:p-6 md:p-10 print-shadow-none">
     
     <!-- Encabezado Editable / Configurable -->
     <header class="border-b pb-6 mb-6">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
         <div>
           <input type="text" value="ESCRIBANÍA BENVENUTO." readonly class="font-bold text-xl md:text-2xl text-slate-900 w-full focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-500">
-          <input type="text" value="Registro N°1 Lezama | Valentin Entessano N°35" readonly class="text-sm text-slate-500 w-full focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-500 mt-1">
-          <input type="text" value="Tel: 02242-432305 | email: mgbenvenuto@gmail.com" readonly class="text-sm text-slate-500 w-full focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-500 mt-1">
+          <input type="text" value="Registro N°1 Lezama | Valentin Entessano N°35" readonly class="text-xs sm:text-sm text-slate-500 w-full focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-500 mt-1">
+          <input type="text" value="Tel: 02242-432305 | email: mgbenvenuto@gmail.com" readonly class="text-xs sm:text-sm text-slate-500 w-full focus:outline-none border-b border-transparent hover:border-slate-300 focus:border-blue-500 mt-1">
         </div>
         <!-- Logo del encabezado: recuadro con la X, calcado del presupuesto de
              referencia. Va como SVG inline (vectores) para que salga nitido en
@@ -30,24 +30,24 @@
           <div class="logo-regla"></div>
         </div>
 
-        <div class="text-right w-full md:w-auto">
+        <div class="text-right w-full lg:w-auto lg:shrink-0">
           <div class="aviso-no-factura inline-block bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded uppercase tracking-wide mb-2">
             Documento no válido como factura
           </div>
-          <div class="flex items-center gap-2 justify-end">
-            <span class="text-sm font-semibold text-slate-600">Presupuesto N°:</span>
+          <div class="fila-etiqueta flex items-center gap-2 justify-end">
+            <span class="text-sm font-semibold text-slate-600 whitespace-nowrap">Presupuesto N°:</span>
             <input type="text" id="nroPresupuesto" value="" placeholder="00000000" class="w-24 text-right border rounded px-2 py-1 text-sm font-bold text-slate-800">
           </div>
-          <div class="flex items-center gap-2 justify-end mt-1">
-            <span class="text-sm font-semibold text-slate-600">Fecha:</span>
+          <div class="fila-etiqueta flex items-center gap-2 justify-end mt-1">
+            <span class="text-sm font-semibold text-slate-600 whitespace-nowrap">Fecha:</span>
             <input type="date" id="fechaPresupuesto" class="border rounded px-2 py-1 text-sm text-slate-800">
           </div>
         </div>
       </div>
     </header>
 
-    <!-- Datos del Cliente y Operación -->
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-slate-50 p-4 rounded-lg border border-slate-200">
+    <!-- Datos del Cliente -->
+    <section class="mb-8 bg-slate-50 p-4 rounded-lg border border-slate-200">
       <div class="space-y-3">
         <!-- <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wider">Datos del Cliente / Operación</h3> -->
         <div>
@@ -77,38 +77,6 @@
           </div>
         </div>
       </div>
-
-      <div class="space-y-3">
-        <!-- <h3 class="font-semibold text-slate-700 text-sm uppercase tracking-wider">Valores de la Operación</h3> -->
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-medium text-slate-500">Valor Compra</label>
-            <input type="number" id="valCompraUsd" value="" class="w-full border rounded px-3 py-1.5 text-sm mt-1 font-semibold text-slate-800">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-500">Valor Hipoteca</label>
-            <input type="number" id="valHipotecaUsd" value="" class="w-full border rounded px-3 py-1.5 text-sm mt-1 font-semibold text-slate-800">
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-medium text-slate-500">Tipo de Cambio</label>
-            <input type="number" id="tipoCambio" value="" step="0.5" class="w-full border rounded px-3 py-1.5 text-sm mt-1 font-semibold text-blue-700">
-            <!-- La operación puede estar en dólares o en pesos: con tipo de cambio
-                 1 los importes se toman tal cual, sin conversión. -->
-            <p class="text-xs text-slate-500 mt-1 no-print">Si la operación ya está en pesos, poné 1.</p>
-            <!-- Aviso de tipo de cambio faltante: sin él los conceptos porcentuales
-                 quedan en cero sin que nada lo advierta. No se imprime. -->
-            <p id="avisoTipoCambio" class="hidden text-xs font-semibold text-red-600 mt-1 no-print">
-              Falta el tipo de cambio: los conceptos porcentuales quedan en $ 0,00.
-            </p>
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-500">Honorarios Esc.</label>
-            <input type="number" id="honorariosUsd" value="" class="w-full border rounded px-3 py-1.5 text-sm mt-1 font-semibold text-slate-800">
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- Detalle manual de lo que se presupuesta -->
@@ -128,7 +96,6 @@
         <thead>
           <tr class="bg-[#0d6efd] text-white text-xs uppercase">
             <th class="p-3 rounded-tl-lg">Concepto / Ítem</th>
-            <th class="p-3 w-32 text-center no-print">% / Base</th>
             <th class="p-3 w-40 text-right rounded-tr-lg">Importe ($)</th>
           </tr>
         </thead>
@@ -137,38 +104,37 @@
           <!-- Conceptos No Gravados: las filas las genera js/script.js a partir de
                CONCEPTOS_NO_GRAVADOS (vacío por defecto: el presupuesto arranca
                sin conceptos cargados) y se pueden agregar, renombrar o eliminar.
-               Cada fila: nombre editable, base del cálculo (% compraventa,
-               % hipoteca o importe fijo) y el importe ya calculado. El precio
-               unitario y el botón de borrar van en la celda .no-print, así el
-               papel solo muestra concepto e importe. Sin filas, el título y el
-               subtotal de la sección no se imprimen (clase .fila-vacia). -->
+               Cada fila: nombre editable e importe en pesos cargado a mano. El
+               input del importe y el botón de borrar no se imprimen, así el
+               papel solo muestra concepto e importe ya formateado. Sin filas, el
+               título y el subtotal de la sección no se imprimen (clase
+               .fila-vacia). -->
           <tr id="filaTituloNoGravado" class="bg-slate-50 font-semibold text-slate-700">
-            <td colspan="3" class="p-2 pl-3">CONCEPTOS NO GRAVADOS POR EL I.V.A. (Impuestos y Tasas)</td>
+            <td colspan="2" class="p-2 pl-3">CONCEPTOS NO GRAVADOS POR EL I.V.A. (Impuestos y Tasas)</td>
           </tr>
           <tr id="filaAgregarNoGravado" class="no-print">
-            <td colspan="3" class="p-2 pl-3">
+            <td colspan="2" class="p-2 pl-3">
               <button type="button" id="agregarNoGravado" class="text-xs font-semibold text-[#0d6efd] hover:text-[#0b5ed7]">+ Agregar concepto no gravado</button>
             </td>
           </tr>
           <tr class="bg-slate-100 font-semibold" id="filaSubtotalNoGravado">
-            <td class="p-3 text-right" colspan="2">Subtotal Conceptos No Gravados:</td>
+            <td class="p-3 text-right">Subtotal Conceptos No Gravados:</td>
             <td class="p-3 text-right font-mono text-blue-900" id="subtotalNoGravado">$0,00</td>
           </tr>
 
           <!-- Conceptos Gravados -->
           <tr class="bg-slate-50 font-semibold text-slate-700">
-            <td colspan="3" class="p-2 pl-3">CONCEPTOS GRAVADOS POR EL I.V.A.</td>
+            <td colspan="2" class="p-2 pl-3">CONCEPTOS GRAVADOS POR EL I.V.A.</td>
           </tr>
           <tr>
             <td class="p-3">Elaboración de minutas / Gastos de Gestión</td>
-            <td class="p-3 text-center no-print">-</td>
             <td class="p-3 text-right font-mono">
               <input type="number" id="valMinutas" value="" class="w-32 border rounded text-right p-1 font-mono text-sm">
               <span class="monto-impreso" id="outMinutas"></span>
             </td>
           </tr>
           <tr class="bg-slate-100 font-semibold">
-            <td class="p-3 text-right" colspan="2">Subtotal Conceptos Gravados:</td>
+            <td class="p-3 text-right">Subtotal Conceptos Gravados:</td>
             <td class="p-3 text-right font-mono text-blue-900" id="subtotalGravado">$0,00</td>
           </tr>
 
@@ -194,9 +160,9 @@
           <span class="font-sans text-slate-600">I.V.A. (21% sobre gravados):</span>
           <span id="resIva" class="font-semibold text-slate-800">$0,00</span>
         </div>
-        <div class="flex justify-between text-lg font-bold border-t border-b border-slate-300 py-2 mt-2 bg-slate-50 px-2 text-slate-900">
-          <span class="font-sans">TOTAL A PAGAR ($):</span>
-          <span id="resTotal" class="text-blue-700">$0,00</span>
+        <div class="flex flex-col items-end gap-1 lg:flex-row lg:items-center lg:justify-between lg:gap-2 text-lg font-bold border-t border-b border-slate-300 py-2 mt-2 bg-slate-50 px-2 text-slate-900">
+          <span class="font-sans whitespace-nowrap">TOTAL A PAGAR ($):</span>
+          <span id="resTotal" class="text-blue-700 whitespace-nowrap">$0,00</span>
         </div>
       </div>
     </section>
