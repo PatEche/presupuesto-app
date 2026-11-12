@@ -128,6 +128,13 @@ colors, shadows, rounded corners or input boxes.
 - Manually typed amounts hide in print; the formatted `.monto-impreso` span
   shows instead. This applies to `#valMinutas` and to the amount of every
   non-gravado row (its input carries `.no-print`).
+- The budget number prints left-aligned inside its box (`#nroPresupuesto`) and
+  the `.fila-etiqueta` rows use a 1mm gap. The screen box is fixed-width and
+  right-aligned, so in paper the number used to float 13mm away from the colon.
+- The total row stacks on screen below `lg` (label over amount) so it never
+  breaks "($):" onto its own line. The print block forces it back to one row:
+  label on the left, amount on the right; remove that override and the paper
+  total stacks too.
 - Browser headers/footers (date, URL, title) cannot be suppressed from CSS. The
   footer explains how to disable them in the print dialog.
 - The "Documento no válido como factura" notice **is** printed, as flat uppercase
@@ -147,6 +154,15 @@ colors, shadows, rounded corners or input boxes.
 - No bundler, no framework, no npm. The only external dependency is the Tailwind
   CDN script tag; keep it that way.
 - Keep print rules in `css/style.css`; do not scatter them into inline styles.
+- Screen-only layout for phones lives in one `@media screen and
+  (max-width: 639.98px)` block in `css/style.css`, above the print block. Below
+  that width the two-column table becomes a stack of blocks (concept on top,
+  amount and delete button below). The media type is `screen` on purpose: those
+  rules must never fire while printing, or the A4 layout collapses.
+- Editable controls are 16px on phones (`input:not([readonly])`, `select`,
+  `textarea`): iOS zooms the whole page when a field below 16px gets focus. The
+  readonly letterhead inputs keep their smaller size so the phone/email line
+  fits on a phone.
 - Commits follow Conventional Commits. No AI attribution or `Co-Authored-By`
   trailers.
 
@@ -175,3 +191,9 @@ colors, shadows, rounded corners or input boxes.
    and the non-gravado rows print concept + amount only (no amount input, no
    delete button, no "+ Agregar" row). With a long detail, up to 11 non-gravado
    rows fit on one page; more than that legitimately spills to a second page.
+   The budget number prints as `Presupuesto N°: 00000123`, one space after the
+   colon.
+6. Narrow the window below 640 px (or open it on a phone): the table stacks
+   (concept on top, amount and the delete button below), nothing scrolls
+   sideways, the letterhead phone/email line is not cut and the total never
+   breaks "($):" onto its own line.
