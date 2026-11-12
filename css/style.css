@@ -30,6 +30,54 @@
   display: none;
 }
 
+/* El botón de borrar de cada fila no gravada es un "×" que, con la tipografía
+   del input, quedaba en 8x20 px: imposible de acertar con el dedo en una
+   tablet o un teléfono. Solo afecta a pantalla, el botón no se imprime. */
+.concepto-borrar {
+  padding: 4px 10px;
+  font-size: 16px;
+}
+
+/* --- Pantallas chicas (teléfonos) -----------------------------------------
+   La planilla está pensada para papel A4 (182 mm de ancho útil) y para
+   escritorio. Debajo de 640 px la tabla de dos columnas dejaba el concepto en
+   ~130 px: no se leía lo que se estaba escribiendo, y el importe ocupaba más
+   ancho que el nombre. Estas reglas son solo de pantalla (@media screen) para
+   no rozar nunca el bloque de impresión de abajo. */
+@media screen and (max-width: 639.98px) {
+  /* Cada fila pasa a ser un bloque: concepto arriba a todo el ancho, importe y
+     borrar abajo a la derecha. El encabezado de la tabla no tiene sentido
+     apilado, así que se oculta. */
+  #tablaDesglose thead {
+    display: none;
+  }
+
+  #tablaDesglose,
+  #tablaDesglose tbody,
+  #tablaDesglose tr,
+  #tablaDesglose td {
+    display: block;
+    width: 100%;
+  }
+
+  #tablaDesglose td {
+    padding: 6px 12px;
+  }
+
+  .concepto-no-gravado td:first-child {
+    padding-bottom: 0;
+  }
+
+  /* iOS hace zoom sobre toda la página al enfocar un campo de menos de 16 px.
+     Los campos editables suben a 16 px; el encabezado es de solo lectura y
+     conserva el tamaño chico para que la línea de teléfono y mail no se corte. */
+  input:not([readonly]),
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 /* --- Logo del encabezado (recuadro con la X) -------------------------------
    Reproduce el logo del presupuesto de referencia: recuadro de 58x44 (ratio
    1.32), marco fino, X en serif negrita ocupando el 33% del ancho y el 50%
@@ -306,6 +354,19 @@
     letter-spacing: 0.08em !important;
   }
 
+  /* --- Número, fecha y etiquetas del encabezado ---------------------------
+     El input del número tiene ancho fijo y texto alineado a la derecha, así
+     que en papel el número quedaba a 13 mm de los dos puntos. Alineado a la
+     izquierda arranca pegado a la etiqueta, y el gap se ajusta a un espacio
+     (1 mm al cuerpo de letra del PDF): "Presupuesto N°: 00000123". */
+  #nroPresupuesto {
+    text-align: left !important;
+  }
+
+  .fila-etiqueta {
+    gap: 1mm !important;
+  }
+
   section {
     margin: 0 0 4mm !important;
     padding: 0 !important;
@@ -379,8 +440,16 @@
     border: 0 !important;
   }
 
-  /* Fila del total: alineada al margen, con las líneas que la enmarcan */
+  /* Fila del total: alineada al margen, con las líneas que la enmarcan.
+     En pantalla chica se apila (etiqueta arriba, importe abajo); en papel
+     vuelve a ser una sola línea con la etiqueta a la izquierda y el importe
+     a la derecha. */
   section:last-of-type > div:last-child > div:last-child {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
     border-top: 1px solid #000 !important;

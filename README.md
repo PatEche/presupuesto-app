@@ -47,6 +47,9 @@ imprimir, los importes salen formateados en lugar del número crudo.
   sombras ni cajas de formulario.
 - Los campos vacíos no imprimen su texto de ayuda. Si no hay conceptos no
   gravados cargados, esa sección no se imprime; si no hay detalle, tampoco.
+- Se puede cargar desde el teléfono o la tablet: en pantallas chicas la tabla se
+  apila (concepto arriba, importe y botón de borrar abajo) y el PDF sale igual
+  que desde la computadora.
 
 ## Cómo se usa
 
