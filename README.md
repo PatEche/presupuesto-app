@@ -10,11 +10,11 @@ navegador y se trabaja.
 
 ## Qué calcula
 
-Cargás los valores de la operación y el tipo de cambio, y la planilla resuelve
-sola los importes en pesos, los impuestos y tasas, el IVA y el total.
+Cargás los importes a mano, en pesos, y la planilla resuelve sola los subtotales,
+el IVA y el total.
 
 **Conceptos no gravados por IVA** (la tabla arranca **vacía**: cada concepto se
-agrega a mano y después se puede renombrar, cambiar de base o eliminar)
+agrega a mano y después se puede renombrar o eliminar)
 
 Los seis conceptos que usa la escribanía, como referencia:
 
@@ -23,20 +23,19 @@ Los seis conceptos que usa la escribanía, como referencia:
 - Aporte notarial de hipoteca
 - Tasa de inscripción de compraventa
 - Tasa de inscripción de hipoteca
-- Sellos de matriz y testimonio (importe fijo)
+- Sellos de matriz y testimonio
 
-Cada fila no gravada elige su base: porcentaje sobre la compraventa, porcentaje
-sobre la hipoteca o un importe fijo en pesos. El subtotal se recalcula solo al
-agregar, editar o borrar filas. Sin filas cargadas la sección no se imprime. En el
-PDF cada fila imprime únicamente concepto e importe.
+Cada fila lleva su nombre y un importe en pesos escrito a mano: no hay base de
+cálculo ni porcentajes, y el importe es exactamente el que se tipea. El subtotal
+se recalcula solo al agregar, editar o borrar filas. Sin filas cargadas la sección
+no se imprime. En el PDF cada fila imprime únicamente concepto e importe.
 
 **Conceptos gravados por IVA**
 
 - Elaboración de minutas / gastos de gestión
 
-El IVA es del 21% y se aplica únicamente sobre los conceptos gravados. Las tasas
-se cargan como porcentaje y los importes fijos a mano; al imprimir, los importes
-salen formateados en lugar del número crudo.
+El IVA es del 21% y se aplica únicamente sobre los conceptos gravados. Al
+imprimir, los importes salen formateados en lugar del número crudo.
 
 ## Salida
 
@@ -52,13 +51,12 @@ salen formateados en lugar del número crudo.
 ## Cómo se usa
 
 1. Abrí `index.html` con doble clic.
-2. Completá el número de presupuesto, la fecha, los datos del cliente
-   (concepto, domicilio, condición frente al IVA) y la operación.
-3. Cargá los valores de la operación y el tipo de cambio. Los valores pueden ser
-   en dólares o en pesos: si la operación ya está en pesos, poné tipo de cambio
-   `1` y los importes se toman tal cual.
-4. Agregá los conceptos no gravados con el botón de la tabla: se renombran,
-   cambian de base y se borran ahí mismo.
+2. Completá el número de presupuesto, la fecha y los datos del cliente
+   (concepto, domicilio, CUIT y condición frente al IVA).
+3. Cargá a mano el importe de cada concepto: no hay valores de operación, tipo de
+   cambio ni honorarios que completar.
+4. Agregá los conceptos no gravados con el botón de la tabla: cada fila lleva su
+   nombre y un importe en pesos, y se renombran o se borran ahí mismo.
 5. Presioná **Imprimir / Guardar en PDF**.
 6. En el diálogo de impresión abrí *Más configuraciones* y desmarcá
    *Encabezados y pies de página*. La fecha, la hora y la ruta del archivo las
@@ -91,8 +89,6 @@ git config core.hooksPath .githooks
 
 ## Limitaciones conocidas
 
-- El campo de honorarios está en pantalla pero **no** entra en el cálculo ni en
-  el total.
 - No hay tests automatizados: la verificación es manual, abriendo la página y
   revisando la vista previa de impresión.
 - El documento se exporta en blanco y negro por diseño; el color de la interfaz
