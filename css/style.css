@@ -136,26 +136,10 @@
     display: none !important;
   }
 
-  /* La columna "% / Base" de la tabla está marcada .no-print, pero eliminar
-     esas celdas con display:none ROMPE la estructura: los `colspan` de los
-     subtotales dejan de coincidir y el encabezado queda más angosto que el
-     cuerpo. Acá la columna se colapsa a ancho 0 conservando la celda, y se
-     vacía su contenido. */
-  th.no-print,
-  td.no-print {
-    display: table-cell !important;
-    width: 0 !important;
-    max-width: 0 !important;
-    padding: 0 !important;
-    border: 0 !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-  }
-
-  th.no-print > *,
-  td.no-print > * {
-    display: none !important;
-  }
+  /* La columna de importes de la tabla ya no tiene controles de pantalla: los
+     inputs de importe y el botón de borrar de las filas no gravadas llevan
+     .no-print y desaparecen con la regla de arriba, así que el papel solo
+     muestra concepto e importe formateado. */
 
   /* Contenedor principal: se descarta el "card" de pantalla */
   body > div,
@@ -219,12 +203,6 @@
     height: 4mm !important;
     margin-top: 0.6mm !important;
     border-left: 0.3mm solid #000 !important;
-  }
-
-  section.bg-slate-50 {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 6mm !important;
   }
 
   section:last-of-type {
